@@ -1,0 +1,83 @@
+from tkinter import * 
+from openpyxl import *
+ 
+wb = load_workbook(r'C:\Users\HP\Desktop\db.xlsx')
+sheet = wb.active
+
+def excel():
+    sheet.column_dimensions['A'].width = 30
+    sheet.column_dimensions['B'].width = 50
+    sheet.column_dimensions['C'].width = 20
+    
+    sheet.cell(row=1,column=1).value = "Name"
+    sheet.cell(row=1,column=2).value = "email"
+    sheet.cell(row=1,column=3).value = "password"
+    
+def focus1(event):
+    name_field.focus_set()
+def focus2(event):
+    email_field.focus_set()
+def focus3(event):
+    password_field.focus_set()
+
+    
+def clear():
+    name_field.delete(0,END)
+    email_field.delete(0,END)
+    password_field.delete(0,END)
+
+    
+def insert():
+    if (name_field.get()=="" and
+       email_field.get()=="" and
+       password_field.get()==""):
+        print("empty input")
+    else:
+        current_row = sheet.max_row
+        current_column = sheet.max_column
+        
+        sheet.cell(row=current_row + 1, column=1).value = name_field.get()
+        sheet.cell(row=current_row + 1, column=2).value = email_field.get()
+        sheet.cell(row=current_row + 1, column=3).value = password_field.get()
+
+    wb.save(r'C:\Users\HP\Desktop\db.xlsx')
+
+    name_fied.focus_set()
+    clear()
+
+if __name__ == "__main__":
+    root = Tk()
+    root.configure(background='light green')
+    root.title("registration form")
+    root.geometry("500x300")
+    excel()
+    
+    name = Label(root, text="Name", bg="light blue")
+    email = Label(root, text="email", bg="light blue")
+    password = Label(root, text="password", bg="light blue")
+    
+    
+    name.grid(row=1, column=0)
+    email.grid(row=2, column=0)
+    password.grid(row=3, column=0)
+    
+    name_field = Entry(root)
+    email_field = Entry(root)
+    password_field = Entry(root, text=password, show='*')
+    
+    name_field.bind("<Return>", focus1)
+    email_field.bind("<Return>", focus2)
+    password_field.bind("<Return>", focus3)
+
+
+    name_field.grid(row=1, column=1, ipadx="100")
+    email_field.grid(row=2, column=1, ipadx="100")
+    password_field.grid(row=3, column=1, ipadx="100")
+    
+    excel()
+    Delete = Button(root,text="Delete",fg="Black",bg="Red",command=clear)
+    Delete.grid(row=4,column=2)
+    
+    submit = Button(root,text="Submit",fg="Black",bg="Red",command=insert)
+    submit.grid(row=4,column=1)
+    root.mainloop()
